@@ -1,5 +1,5 @@
 :root { 
-    --primary-green: #2ecc71; 
+    --primary-black: #000000; 
     --bg-color: #f5f7fa; 
 }
 
@@ -57,3 +57,4 @@ body {
     50% { opacity: 1; }
     100% { opacity: 0.6; }
 }
+

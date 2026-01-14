@@ -1,53 +1,63 @@
 const API = "https://script.google.com/macros/s/AKfycbwWa0WNM5koQ2xt4tc5ABb9HTBJXxjQSIrZAp0Fa6UG0sxV8FW4Zo_X6fXRG8TVWde4/exec"; 
 
 let lastValue = "";
-let idleTimeout;
+let idleTimeout = null;
 
 function setIdle() {
     document.getElementById('n').innerText = "System Ready";
     document.getElementById('a').innerText = "0";
-    document.getElementById('q').innerHTML = `<div class="idle-msg">Waiting for QR...</div>`;
+    document.getElementById('q').innerHTML = `<div class="idle-msg">Waiting for transaction...</div>`;
     lastValue = "IDLE";
+    if (idleTimeout) clearTimeout(idleTimeout);
 }
 
 async function update() {
     try {
-        // Prevent browser caching by adding a timestamp
-        const response = await fetch(`${API}?t=${new Date().getTime()}`);
-        if (!response.ok) throw new Error('Network response was not ok');
+        // Fetch with cache-busting to ensure speed
+        const response = await fetch(`${API}?t=${Date.now()}`);
+        if (!response.ok) return;
         
         const data = await response.json();
-        
-        // If amount is 0, empty, or null -> Go Idle
-        if (!data.live.upiid || !data.live.amount || data.live.amount == 0) {
+        const live = data.live;
+
+        // Reset to IDLE if no active amount or ID is found
+        if (!live || !live.upiid || !live.amount || live.amount == 0) {
             if (lastValue !== "IDLE") setIdle();
             return;
         }
 
-        const currentValue = data.live.amount + data.live.upiid;
+        const currentValue = live.amount + live.upiid;
         
+        // Only trigger update if data actually changed
         if (currentValue !== lastValue) {
-            clearTimeout(idleTimeout);
-            
-            document.getElementById('n').innerText = data.live.name;
-            document.getElementById('a').innerText = data.live.amount;
-            
-            const upi = `upi://pay?pa=${data.live.upiid}&pn=${encodeURIComponent(data.live.name)}&am=${data.live.amount}&cu=INR`;
-            const qrUrl = `https://api.qrserver.com/v1/create-qr-code/?size=320x320&data=${encodeURIComponent(upi)}`;
-            
-            document.getElementById('q').innerHTML = `<img src="${qrUrl}" alt="QR Code">`;
-            lastValue = currentValue;
+            // Clear any existing countdown
+            if (idleTimeout) clearTimeout(idleTimeout);
 
-            // Start 2-minute timer (120,000 ms)
-            idleTimeout = setTimeout(setIdle, 120000);
+            const upiString = `upi://pay?pa=${live.upiid}&pn=${encodeURIComponent(live.name)}&am=${live.amount}&cu=INR`;
+            // Using QuickChart API for faster response times
+            const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiString)}&size=300&margin=1`;
+
+            // PRE-LOAD IMAGE: Wait for the image to download before showing it
+            const tempImg = new Image();
+            tempImg.src = qrUrl;
+            tempImg.onload = () => {
+                document.getElementById('a').innerText = live.amount;
+                document.getElementById('n').innerText = live.name;
+                const qrContainer = document.getElementById('q');
+                qrContainer.innerHTML = '';
+                qrContainer.appendChild(tempImg);
+                
+                lastValue = currentValue;
+
+                // Start the 2-minute timer ONLY after successful render
+                idleTimeout = setTimeout(setIdle, 120000);
+            };
         }
     } catch (error) {
-        console.error("Fetch Error:", error);
-        document.getElementById('n').innerText = "Offline - Retrying...";
+        console.error("Sync Error:", error);
     }
 }
 
-// Initial run
+// Start polling
 update(); 
-// Poll every 3 seconds
 setInterval(update, 3000);

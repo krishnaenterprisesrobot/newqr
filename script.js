@@ -60,4 +60,4 @@ async function update() {
 
 // Start polling
 update(); 
-setInterval(update, 3000);
+setInterval(update, 2000);

@@ -3,17 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Live Payment QR</title>
+    <title>Professional 3D Payment</title>
     <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="card">
-        <div class="amt-label">Requested Amount</div>
-        <div class="amt">₹<span id="a">0</span></div>
-        <div id="q">
-            <div class="idle-msg">Ready to connect...</div>
+    <div class="stage">
+        <div class="card-3d-straight" id="main-card">
+            <div class="header-section">
+                <div class="live-dot"></div>
+                <span>PAYMENT GATEWAY</span>
+            </div>
+            
+            <div class="amount-wrap" id="amount-layer">
+                <span class="currency">₹</span>
+                <span id="a" class="amount-text">0</span>
+            </div>
+
+            <div class="qr-vault">
+                <div id="q" class="qr-content">
+                    <div class="idle-ui">
+                        <div class="scanner-line"></div>
+                        <p>READY</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-wrap" id="footer-layer">
+                <div id="n" class="client-name">System Standby</div>
+                <div class="secure-tag">256-BIT ENCRYPTED</div>
+            </div>
         </div>
-        <div class="name" id="n">Initializing...</div>
     </div>
     <script src="script.js"></script>
 </body>

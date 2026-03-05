@@ -81,16 +81,8 @@ async function update() {
             
             lastValue = currentValue;
         }
-    } catch (e) { 
-        console.error("Sync Error:", e); 
-    }
+    } catch (e) { console.error("Sync Error:", e); }
 }
 
-// Start polling
 setInterval(update, 2000);
-
-// Interaction listener to unlock audio playback (browsers block auto-play)
-document.body.addEventListener('click', () => {
-    const audio = document.getElementById("upiSound");
-    audio.load();
-}, {once: true});
+document.body.addEventListener('click', () => document.getElementById("upiSound").load(), {once: true});

@@ -14,7 +14,9 @@ function setIdle() {
 }
 
 function playSound() {
-    document.getElementById("upiSound").play().catch(() => {});
+    const sound = document.getElementById("upiSound");
+    sound.currentTime = 0; // Rewind to start
+    sound.play().catch(e => console.warn("Playback requires user gesture first."));
 }
 
 function createConfetti() {
@@ -38,14 +40,15 @@ function showSuccess(amount, name) {
     document.getElementById('success-tx').innerText = "TX" + Math.floor(Math.random()*9999999);
     
     document.getElementById('success-overlay').style.display = 'flex';
-    playSound();
+    
+    playSound(); 
     createConfetti();
 
     setTimeout(() => {
         document.getElementById('success-overlay').style.display = 'none';
         setIdle();
         isSuccessState = false;
-    }, 5000);
+    }, 6000);
 }
 
 async function update() {
@@ -61,6 +64,7 @@ async function update() {
             return;
         }
 
+        // Logic for success trigger from Google Sheet
         if (live.amount === "SUCCESS" || live.upiid === "SUCCESS_FLAG") {
             const currentAmt = document.getElementById('a').innerText;
             const currentName = document.getElementById('n').innerText;
@@ -70,6 +74,7 @@ async function update() {
             return;
         }
 
+        // QR Generation Logic
         const currentValue = live.amount + live.upiid;
         if (currentValue !== lastValue) {
             const upiString = `upi://pay?pa=${live.upiid}&pn=${encodeURIComponent(live.name)}&am=${live.amount}&cu=INR`;
@@ -84,5 +89,14 @@ async function update() {
     } catch (e) { console.error("Sync Error:", e); }
 }
 
+// Poll the API every 2 seconds
 setInterval(update, 2000);
-document.body.addEventListener('click', () => document.getElementById("upiSound").load(), {once: true});
+
+// Interaction Unlock: Essential for Mobile Audio
+document.body.addEventListener('click', () => {
+    const audio = document.getElementById("upiSound");
+    audio.play().then(() => {
+        audio.pause();
+        audio.currentTime = 0;
+    }).catch(e => {});
+}, {once: true});

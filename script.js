@@ -15,8 +15,8 @@ function setIdle() {
 
 function playSound() {
     const sound = document.getElementById("upiSound");
-    sound.currentTime = 0; // Rewind to start
-    sound.play().catch(e => console.warn("Playback requires user gesture first."));
+    sound.currentTime = 0; 
+    sound.play().catch(e => console.log("Sound blocked. Please click the screen once."));
 }
 
 function createConfetti() {
@@ -64,7 +64,6 @@ async function update() {
             return;
         }
 
-        // Logic for success trigger from Google Sheet
         if (live.amount === "SUCCESS" || live.upiid === "SUCCESS_FLAG") {
             const currentAmt = document.getElementById('a').innerText;
             const currentName = document.getElementById('n').innerText;
@@ -74,7 +73,6 @@ async function update() {
             return;
         }
 
-        // QR Generation Logic
         const currentValue = live.amount + live.upiid;
         if (currentValue !== lastValue) {
             const upiString = `upi://pay?pa=${live.upiid}&pn=${encodeURIComponent(live.name)}&am=${live.amount}&cu=INR`;
@@ -89,14 +87,15 @@ async function update() {
     } catch (e) { console.error("Sync Error:", e); }
 }
 
-// Poll the API every 2 seconds
 setInterval(update, 2000);
 
-// Interaction Unlock: Essential for Mobile Audio
+// CRITICAL: Unlocks audio on mobile. 
+// User MUST tap the screen once after loading for sound to work.
 document.body.addEventListener('click', () => {
     const audio = document.getElementById("upiSound");
     audio.play().then(() => {
         audio.pause();
         audio.currentTime = 0;
+        console.log("Audio Unlocked");
     }).catch(e => {});
 }, {once: true});

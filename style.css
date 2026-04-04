@@ -33,7 +33,6 @@ body {
     text-align: center;
     transform-style: preserve-3d;
     box-shadow: 0 20px 40px rgba(0,0,0,0.08);
-    transition: transform 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 #success-overlay {
@@ -72,21 +71,16 @@ body {
 .currency { font-size: 24px; vertical-align: top; margin-top: 10px; display: inline-block; }
 
 .qr-vault { 
-    width: 100%; 
-    aspect-ratio: 1/1; 
-    max-width: 280px;
-    margin: 20px auto; 
-    background: #f8fafc; 
-    border-radius: 32px; 
-    display: flex; 
-    align-items: center; 
-    justify-content: center; 
+    width: 100%; aspect-ratio: 1/1; 
+    max-width: 280px; margin: 20px auto; 
+    background: #f8fafc; border-radius: 32px; 
+    display: flex; align-items: center; justify-content: center; 
     overflow: hidden; 
 }
 
 .idle-ui { color: #cbd5e1; font-weight: 800; font-size: 12px; }
 .scanner-line { width: 40px; height: 2px; background: var(--accent); margin: 0 auto 10px auto; animation: scan 2s infinite; }
-.confetti { position: absolute; width: 8px; height: 8px; top: -10px; animation: fall linear infinite; z-index: 5; }
+.confetti { position: absolute; width: 8px; height: 8px; top: -10px; animation: fall linear infinite; z-index: 15; }
 
 @keyframes fall { 100% { transform: translateY(110vh) rotate(720deg); } }
 @keyframes scan { 50% { transform: scaleX(2.5); opacity: 1; } }

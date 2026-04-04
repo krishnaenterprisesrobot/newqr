@@ -12,12 +12,12 @@
     <div class="card-3d-straight" id="main-card">
         <div id="success-overlay">
             <div class="success-circle">✓</div>
-            <h2 style="color:var(--success); margin:0;">Success!</h2>
-            <div id="success-amt" style="font-size:32px; font-weight:800; margin:10px 0;">₹0</div>
-            <div style="width:100%; margin-top:15px;">
+            <h2 class="status-title">Success!</h2>
+            <div id="success-amt" class="success-amount">₹0</div>
+            <div class="details-table">
                 <div class="row"><span>To</span><span id="success-to">Store</span></div>
                 <div class="row"><span>ID</span><span id="success-tx">TX12345</span></div>
-                <div class="row"><span>Status</span><span style="color:var(--success)">Completed</span></div>
+                <div class="row"><span>Status</span><span class="status-badge">Completed</span></div>
             </div>
         </div>
 
@@ -27,7 +27,7 @@
                 <span>PAYMENT GATEWAY</span>
             </div>
             <div class="amount-wrap">
-                <span style="font-size:24px">₹</span><span id="a" class="amount-text">0</span>
+                <span class="currency">₹</span><span id="a" class="amount-text">0</span>
             </div>
             <div class="qr-vault" id="q">
                 <div class="idle-ui">
@@ -35,15 +35,16 @@
                     <p>AWAITING SIGNAL</p>
                 </div>
             </div>
-            <div style="margin-top:25px">
-                <div id="n" style="font-size:20px; font-weight:700;">System Standby</div>
-                <div style="font-size:10px; color:#94a3b8; margin-top:8px; letter-spacing:1px;">256-BIT ENCRYPTED</div>
+            <div class="footer-info">
+                <div id="n" class="merchant-name">System Standby</div>
+                <div class="encryption-tag">256-BIT ENCRYPTED</div>
             </div>
         </div>
     </div>
 
     <audio id="upiSound" preload="auto">
-        <source src="https://cdn.pixabay.com/download/audio/2022/03/10/audio_c8631b47d3.mp3?filename=notification-2-269292.mp3" type="audio/mpeg">
+        <source src="Sound/Notif.wav" type="audio/wav">
+        <source src="https://media.vocaroo.com/mp3/19Eb23AGb2xs" type="audio/mpeg">
     </audio>
 
     <script src="script.js"></script>

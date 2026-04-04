@@ -7,9 +7,7 @@
     --success: #30c46c;
 }
 
-* {
-    box-sizing: border-box; /* Crucial for fit-to-page */
-}
+* { box-sizing: border-box; }
 
 body {
     margin: 0;
@@ -21,13 +19,13 @@ body {
     background-color: var(--canvas);
     font-family: 'Plus Jakarta Sans', sans-serif;
     perspective: 1200px;
-    overflow: hidden; /* Prevent scrolling */
-    touch-action: manipulation; /* Disable double-tap zoom */
+    overflow: hidden;
+    touch-action: manipulation;
 }
 
 .card-3d-straight {
     position: relative;
-    width: 90%; /* Responsive width */
+    width: 90%;
     max-width: 360px;
     background: var(--card);
     padding: 40px 30px;
@@ -71,12 +69,13 @@ body {
 .header-section { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; font-weight: 800; color: var(--secondary); margin-bottom: 20px; }
 .live-dot { width: 6px; height: 6px; background: #10b981; border-radius: 50%; box-shadow: 0 0 10px #10b981; }
 .amount-text { font-size: 58px; font-weight: 800; color: var(--primary); letter-spacing: -2px; }
+.currency { font-size: 24px; vertical-align: top; margin-top: 10px; display: inline-block; }
 
 .qr-vault { 
     width: 100%; 
     aspect-ratio: 1/1; 
     max-width: 280px;
-    margin: 0 auto; 
+    margin: 20px auto; 
     background: #f8fafc; 
     border-radius: 32px; 
     display: flex; 
@@ -93,8 +92,10 @@ body {
 @keyframes scan { 50% { transform: scaleX(2.5); opacity: 1; } }
 
 .row { display: flex; justify-content: space-between; width: 100%; margin: 8px 0; font-size: 14px; border-bottom: 1px solid #eee; padding-bottom: 5px; }
+.status-badge { color: var(--success); font-weight: 600; }
+.merchant-name { font-size: 20px; font-weight: 700; }
+.encryption-tag { font-size: 10px; color: #94a3b8; margin-top: 8px; letter-spacing: 1px; }
 
-/* Small screen adjustments */
 @media (max-height: 600px) {
     .card-3d-straight { padding: 20px; }
     .amount-text { font-size: 40px; }

@@ -59,11 +59,13 @@ async function update() {
         const data = await response.json();
         const live = data.live;
 
-        if (!live || !live.upiid || !live.amount || live.amount == 0 || live.amount === "0") {
+        // If structure is cleared out completely or holds an empty system reset state
+        if (!live || !live.upiid || live.name === "Waiting...") {
             if (lastValue !== "IDLE") setIdle();
             return;
         }
 
+        // Handle success flag
         if (live.amount === "SUCCESS" || live.upiid === "SUCCESS_FLAG") {
             const currentAmt = document.getElementById('a').innerText;
             const currentName = document.getElementById('n').innerText;
@@ -75,7 +77,12 @@ async function update() {
 
         const currentValue = live.amount + live.upiid;
         if (currentValue !== lastValue) {
-            const upiString = `upi://pay?pa=${live.upiid}&pn=${encodeURIComponent(live.name)}&am=${live.amount}&cu=INR`;
+            // Build raw deep link configuration. Handles zero amount strings cleanly
+            let upiString = `upi://pay?pa=${live.upiid}&pn=${encodeURIComponent(live.name)}&cu=INR`;
+            if (live.amount && live.amount != 0 && live.amount !== "0") {
+                upiString += `&am=${live.amount}`;
+            }
+
             const qrUrl = `https://quickchart.io/qr?text=${encodeURIComponent(upiString)}&size=300&margin=1&ecLevel=H`;
 
             document.getElementById('a').innerText = live.amount;
